@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BattleshipDBModelStoreContainer" CdmEntityContainer="BattleshipDBEntities">
+    <EntitySetMapping Name="Attacks">
+      <EntityTypeMapping TypeName="BattleshipDBModel.Attack">
+        <MappingFragment StoreEntitySet="Attack">
+          <ScalarProperty Name="attackId" ColumnName="attackId" />
+          <ScalarProperty Name="coordinate" ColumnName="coordinate" />
+          <ScalarProperty Name="hit" ColumnName="hit" />
+          <ScalarProperty Name="playerFK" ColumnName="playerFK" />
+          <ScalarProperty Name="gameFK" ColumnName="gameFK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Games">
+      <EntityTypeMapping TypeName="BattleshipDBModel.Game">
+        <MappingFragment StoreEntitySet="Game">
+          <ScalarProperty Name="gameId" ColumnName="gameId" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="creatorFK" ColumnName="creatorFK" />
+          <ScalarProperty Name="opponentFK" ColumnName="opponentFK" />
+          <ScalarProperty Name="complete" ColumnName="complete" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GameShipConfigurations">
+      <EntityTypeMapping TypeName="BattleshipDBModel.GameShipConfiguration">
+        <MappingFragment StoreEntitySet="GameShipConfigurations">
+          <ScalarProperty Name="configId" ColumnName="configId" />
+          <ScalarProperty Name="playerFK" ColumnName="playerFK" />
+          <ScalarProperty Name="gameFK" ColumnName="gameFK" />
+          <ScalarProperty Name="shipFK" ColumnName="shipFK" />
+          <ScalarProperty Name="coordinate" ColumnName="coordinate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Players">
+      <EntityTypeMapping TypeName="BattleshipDBModel.Player">
+        <MappingFragment StoreEntitySet="Player">
+          <ScalarProperty Name="playerId" ColumnName="playerId" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ships">
+      <EntityTypeMapping TypeName="BattleshipDBModel.Ship">
+        <MappingFragment StoreEntitySet="Ship">
+          <ScalarProperty Name="shipId" ColumnName="shipId" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="size" ColumnName="size" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

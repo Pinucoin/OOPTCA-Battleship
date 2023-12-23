@@ -1,0 +1,12 @@
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\Common.dll.config
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\Common.dll
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\Common.pdb
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\EntityFramework.dll
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\EntityFramework.xml
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\obj\Debug\Common.csproj.AssemblyReference.cache
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\obj\Debug\Common.csproj.CopyComplete
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\obj\Debug\Common.dll
+C:\Users\brama\source\repos\OOPTCA-Battleship\Common\obj\Debug\Common.pdb
