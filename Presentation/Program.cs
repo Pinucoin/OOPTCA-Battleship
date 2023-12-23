@@ -1,7 +1,6 @@
 ﻿using Common;
 using DataAccess;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Presentation
@@ -66,13 +65,15 @@ namespace Presentation
 
                 //Checking for existing players with the same username
                 IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
-                foreach (Player existingPlayer in players) {
-                    if (existingPlayer.username == player.username) {
+                foreach (Player existingPlayer in players)
+                {
+                    if (existingPlayer.username == player.username)
+                    {
                         Console.WriteLine(String.Format("Player with name [{0}] Already exists. Try again with a different username. ", existingPlayer.username));
                         validUsername = false;
                     }
                 }
-            }while(!validUsername);
+            } while (!validUsername);
 
             //Getting user input for password
             Console.WriteLine("Input player password: ");
@@ -87,7 +88,8 @@ namespace Presentation
             ConsoleKeyInfo keyInfo;
 
             //Hidding user input with *
-            do{
+            do
+            {
                 keyInfo = Console.ReadKey(true);
 
                 if (keyInfo.Key != ConsoleKey.Enter)
