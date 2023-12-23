@@ -12,6 +12,7 @@ namespace DataAccess
 
         public IQueryable<Player> GetPlayers()
         {
+            //Getting all players in player table
             var players = from player in Context.Players
                           select player;
             return players.AsQueryable();
@@ -19,6 +20,7 @@ namespace DataAccess
 
         public void addPlayer(Player player)
         {
+            //Adding player and saving changes
             Context.Players.Add(player);
             Context.SaveChanges();
         }

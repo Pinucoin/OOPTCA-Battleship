@@ -22,13 +22,17 @@ namespace Presentation
                 switch (choice)
                 {
                     case "1":
+                        //Option 1: Add Player Details
                         addPlayer();
                         break;
                     case "2":
+                        //Option 2: Configure Ships
                         break;
                     case "3":
+                        //Option 3: Launch Attack
                         break;
                     case "4":
+                        //Option 4: Quit
                         break;
                     default:
                         Console.WriteLine(String.Format("Invalid input [{0}]. Please try again. ", choice));
@@ -41,10 +45,11 @@ namespace Presentation
 
         public static void printMenu()
         {
+            // printing menu UI
             Console.WriteLine("======================================================================");
             Console.WriteLine("  ____       _______ _______ _      ______  _____ _    _ _____ _____  \r\n |  _ \\   /\\|__   __|__   __| |    |  ____|/ ____| |  | |_   _|  __ \\ \r\n | |_) | /  \\  | |     | |  | |    | |__  | (___ | |__| | | | | |__) |\r\n |  _ < / /\\ \\ | |     | |  | |    |  __|  \\___ \\|  __  | | | |  ___/ \r\n | |_) / ____ \\| |     | |  | |____| |____ ____) | |  | |_| |_| |     \r\n |____/_/    \\_\\_|     |_|  |______|______|_____/|_|  |_|_____|_| ");
             Console.WriteLine("======================================================================");
-            Console.WriteLine("\n 1.\tAdd Player details\n 2.\tConfigure Ships\n 3.\tLaunch Attack\n 4.\tQuit\n");
+            Console.WriteLine("\n 1.\tAdd Player Details\n 2.\tConfigure Ships\n 3.\tLaunch Attack\n 4.\tQuit\n");
         }
 
         public static void addPlayer()
@@ -52,11 +57,14 @@ namespace Presentation
             bool validUsername = true;
             Player player = new Player();
 
-            do {
+            //Getting user input for username
+            do
+            {
                 validUsername = true;
                 Console.WriteLine("Input player username: ");
                 player.username = Console.ReadLine();
 
+                //Checking for existing players with the same username
                 IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
                 foreach (Player existingPlayer in players) {
                     if (existingPlayer.username == player.username) {
@@ -66,7 +74,8 @@ namespace Presentation
                 }
             }while(!validUsername);
 
-                Console.WriteLine("Input player password: ");
+            //Getting user input for password
+            Console.WriteLine("Input player password: ");
             player.password = getPassword();
 
             playerRepository.addPlayer(player);
@@ -77,10 +86,11 @@ namespace Presentation
             string password = "";
             ConsoleKeyInfo keyInfo;
 
+            //Hidding user input with *
             do{
                 keyInfo = Console.ReadKey(true);
 
-                if (keyInfo.Key != ConsoleKey.Enter && keyInfo.Key != ConsoleKey.Escape)
+                if (keyInfo.Key != ConsoleKey.Enter)
                 {
                     password += keyInfo.KeyChar;
                     Console.Write("*");
