@@ -26,6 +26,8 @@ namespace Presentation
                         break;
                     case "2":
                         //Option 2: Configure Ships
+                        GameScreen.PrintGrid();
+                        Console.ReadKey();
                         break;
                     case "3":
                         //Option 3: Launch Attack
