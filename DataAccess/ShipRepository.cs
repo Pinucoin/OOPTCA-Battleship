@@ -7,7 +7,6 @@ namespace DataAccess
     {
         public Ship GetShipById(int id)
         {
-            //Getting all players in player table
             var selectedShip = from ship in Context.Ships
                                where ship.shipId == id
                                select ship;

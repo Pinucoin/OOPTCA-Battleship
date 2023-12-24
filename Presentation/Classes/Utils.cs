@@ -27,7 +27,8 @@ namespace Presentation.Classes
 
             if (startCoordinate[0] == endCoordinate[0])
             {
-                if (startCoordinate[1] > endCoordinate[1]) {
+                if (startCoordinate[1] > endCoordinate[1])
+                {
                     int[] temp = startCoordinate;
                     startCoordinate = endCoordinate;
                     endCoordinate = temp;
@@ -69,8 +70,10 @@ namespace Presentation.Classes
             return points;
         }
 
-        public static bool equateArrays(int[] array1, int[] array2) {
-            if (array1[0] == array2[0] && array1[1] == array2[1]) {
+        public static bool equateArrays(int[] array1, int[] array2)
+        {
+            if (array1[0] == array2[0] && array1[1] == array2[1])
+            {
                 return true;
             }
             return false;

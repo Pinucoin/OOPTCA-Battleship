@@ -5,10 +5,6 @@ namespace DataAccess
 {
     public class PlayerRepository : ConnectionContext
     {
-        public PlayerRepository() : base()
-        {
-
-        }
 
         public IQueryable<Player> GetPlayers()
         {

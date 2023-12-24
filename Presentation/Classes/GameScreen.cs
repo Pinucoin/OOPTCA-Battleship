@@ -3,7 +3,6 @@ using DataAccess;
 using Presentation.Classes;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Presentation
 {
@@ -34,7 +33,8 @@ namespace Presentation
                 //gameShipConfig coordinates are 4 letters, representing both ends of a ship
                 Ship ship = shipRepository.GetShipById(gameShipConfiguration.shipFK);
                 List<int[]> shipBodyCoordinates = Utils.parseMultipleScreenCord(gameShipConfiguration.coordinate, ship.size);
-                foreach (int[] point in shipBodyCoordinates) {
+                foreach (int[] point in shipBodyCoordinates)
+                {
                     shipCells.Add(new ShipCell(point));
                 }
             }
@@ -71,7 +71,7 @@ namespace Presentation
             {
                 if (Utils.equateArrays(cell.coordinate, position))
                 {
-                    
+
                     cell.PrintCell();
                     present = true;
                 }

@@ -1,9 +1,7 @@
 ﻿using Common;
 using DataAccess;
-using Presentation.Classes;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Presentation
@@ -11,14 +9,11 @@ namespace Presentation
     public class Program
     {
         private static PlayerRepository playerRepository = new PlayerRepository();
+        private static GameRepository gameRepository = new GameRepository();
 
         static void Main(string[] args)
         {
 
-            Attack attack = new Attack();
-            attack.coordinate = "A5";
-            List<Attack> attacks = new List<Attack> { attack };
-            GameScreen attackScreen = new GameScreen(attacks);
             string choice;
 
             do
@@ -30,18 +25,20 @@ namespace Presentation
                 {
                     case "1":
                         //Option 1: Add Player Details
-                        addPlayer();
+                        addPlayersCreateGame();
+                        Console.ReadKey();
                         break;
                     case "2":
                         //Option 2: Configure Ships
-                        attackScreen.PrintGrid();
                         Console.ReadKey();
                         break;
                     case "3":
                         //Option 3: Launch Attack
+                        Console.ReadKey();
                         break;
                     case "4":
                         //Option 4: Quit
+                        Console.ReadKey();
                         break;
                     default:
                         Console.WriteLine(String.Format("Invalid input [{0}]. Please try again. ", choice));
@@ -61,35 +58,55 @@ namespace Presentation
             Console.WriteLine("\n 1.\tAdd Player Details\n 2.\tConfigure Ships\n 3.\tLaunch Attack\n 4.\tQuit\n");
         }
 
-        public static void addPlayer()
+        public static void addPlayersCreateGame()
         {
-            bool validUsername = true;
-            Player player = new Player();
-
-            //Getting user input for username
-            do
+            Game game = new Game();
+            for (int i = 0; i < 2; i++)
             {
-                validUsername = true;
-                Console.WriteLine("Input player username: ");
-                player.username = Console.ReadLine();
+                bool validUsername = true;
+                Player player = new Player();
 
-                //Checking for existing players with the same username
-                IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
-                foreach (Player existingPlayer in players)
+                //Getting user input for username
+                do
                 {
-                    if (existingPlayer.username == player.username)
+                    validUsername = true;
+                    Console.WriteLine("Input player username: ");
+                    player.username = Console.ReadLine();
+
+                    //Checking for existing players with the same username
+                    IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
+                    foreach (Player existingPlayer in players)
                     {
-                        Console.WriteLine(String.Format("Player with name [{0}] Already exists. Try again with a different username. ", existingPlayer.username));
-                        validUsername = false;
+                        if (existingPlayer.username == player.username)
+                        {
+                            Console.WriteLine(String.Format("Player with name [{0}] Already exists. Try again with a different username. ", existingPlayer.username));
+                            validUsername = false;
+                        }
                     }
+                } while (!validUsername);
+
+                //Getting user input for password
+                Console.WriteLine("Input player password: ");
+                player.password = getPassword();
+
+                playerRepository.addPlayer(player);
+                Console.WriteLine(String.Format("Player {0} created.", player.username));
+
+                if (i == 0)
+                {
+                    game.creatorFK = player.playerId;
                 }
-            } while (!validUsername);
+                else {
+                    game.opponentFK = player.playerId;
+                }
+            }
 
-            //Getting user input for password
-            Console.WriteLine("Input player password: ");
-            player.password = getPassword();
+            Console.WriteLine("2 Players Added; Insert Game Title:");
+            game.title = Console.ReadLine();
+            game.complete = false;
 
-            playerRepository.addPlayer(player);
+            gameRepository.addGame(game);
+            Console.WriteLine(String.Format("Game with Title {0} added. ", game.title));
         }
 
         public static string getPassword()
@@ -112,5 +129,6 @@ namespace Presentation
             Console.WriteLine();
             return password;
         }
+
     }
 }
