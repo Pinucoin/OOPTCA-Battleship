@@ -1,6 +1,9 @@
 ﻿using Common;
 using DataAccess;
+using Presentation.Classes;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Presentation
@@ -11,6 +14,11 @@ namespace Presentation
 
         static void Main(string[] args)
         {
+
+            Attack attack = new Attack();
+            attack.coordinate = "A5";
+            List<Attack> attacks = new List<Attack> { attack };
+            GameScreen attackScreen = new GameScreen(attacks);
             string choice;
 
             do
@@ -26,7 +34,7 @@ namespace Presentation
                         break;
                     case "2":
                         //Option 2: Configure Ships
-                        GameScreen.PrintGrid();
+                        attackScreen.PrintGrid();
                         Console.ReadKey();
                         break;
                     case "3":
