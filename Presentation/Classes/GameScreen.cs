@@ -56,7 +56,7 @@ namespace Presentation
                 {
                     if (!specialCellPresent(cells, new int[] { row, col }))
                     {
-                        Console.Write(String.Format("=", row, col));
+                        Console.Write(String.Format("≈", row, col));
                     }
                     Console.Write("\t");
                 }
@@ -122,17 +122,5 @@ namespace Presentation
         }
     }
 
-    public class EmptyCell : Cell
-    {
-        public EmptyCell(int[] coordinate)
-        {
-            this.coordinate = coordinate;
-        }
-
-        public override void PrintCell()
-        {
-            Console.WriteLine("=");
-        }
-    }
 
 }

@@ -29,9 +29,8 @@ namespace Presentation.Classes
             {
                 if (startCoordinate[1] > endCoordinate[1])
                 {
-                    int[] temp = startCoordinate;
+                    //swap
                     startCoordinate = endCoordinate;
-                    endCoordinate = temp;
                 }
                 //Horizontal
                 completeCoordinate = fillBetweenPoints(startCoordinate, length, true);
@@ -40,9 +39,8 @@ namespace Presentation.Classes
             {
                 if (startCoordinate[0] > endCoordinate[0])
                 {
-                    int[] temp = startCoordinate;
+                    //swap
                     startCoordinate = endCoordinate;
-                    endCoordinate = temp;
                 }
 
                 //Vertical

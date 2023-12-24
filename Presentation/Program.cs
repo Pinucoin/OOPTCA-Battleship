@@ -13,7 +13,7 @@ namespace Presentation
 
         static void Main(string[] args)
         {
-
+            GameScreen game = new GameScreen(new List<Cell>());
             string choice;
 
             do
@@ -30,6 +30,7 @@ namespace Presentation
                         break;
                     case "2":
                         //Option 2: Configure Ships
+                        game.PrintGrid();
                         Console.ReadKey();
                         break;
                     case "3":
