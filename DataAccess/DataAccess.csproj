@@ -51,6 +51,7 @@
     <Compile Include="ConnectionContext.cs" />
     <Compile Include="PlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
