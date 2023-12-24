@@ -23,9 +23,9 @@ namespace Common
     
         public int gameId { get; set; }
         public string title { get; set; }
-        public Nullable<int> creatorFK { get; set; }
-        public Nullable<int> opponentFK { get; set; }
-        public Nullable<bool> complete { get; set; }
+        public int creatorFK { get; set; }
+        public int opponentFK { get; set; }
+        public bool complete { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Attack> Attacks { get; set; }

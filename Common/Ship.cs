@@ -22,7 +22,7 @@ namespace Common
     
         public int shipId { get; set; }
         public string title { get; set; }
-        public Nullable<int> size { get; set; }
+        public int size { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GameShipConfiguration> GameShipConfigurations { get; set; }

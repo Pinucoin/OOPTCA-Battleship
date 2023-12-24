@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="599104e67be94c118ff736b7b6405da4" Name="Diagram1">
+      <Diagram DiagramId="c24ec1b5efd244a38bce5091c99507bd" Name="Diagram1">
         <EntityTypeShape EntityType="BattleshipDBModel.Attack" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="BattleshipDBModel.Game" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BattleshipDBModel.GameShipConfiguration" Width="1.5" PointX="8.25" PointY="4.375" IsExpanded="true" />

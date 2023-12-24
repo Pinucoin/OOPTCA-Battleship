@@ -5,10 +5,10 @@
       <PropertyRef Name="attackId" />
     </Key>
     <Property Name="attackId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="coordinate" Type="nvarchar" MaxLength="50" />
-    <Property Name="hit" Type="bit" />
-    <Property Name="playerFK" Type="int" />
-    <Property Name="gameFK" Type="int" />
+    <Property Name="coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="hit" Type="bit" Nullable="false" />
+    <Property Name="playerFK" Type="int" Nullable="false" />
+    <Property Name="gameFK" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Game">
     <Key>
@@ -16,19 +16,19 @@
     </Key>
     <Property Name="gameId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="title" Type="nvarchar" MaxLength="50" />
-    <Property Name="creatorFK" Type="int" />
-    <Property Name="opponentFK" Type="int" />
-    <Property Name="complete" Type="bit" />
+    <Property Name="creatorFK" Type="int" Nullable="false" />
+    <Property Name="opponentFK" Type="int" Nullable="false" />
+    <Property Name="complete" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="GameShipConfigurations">
     <Key>
       <PropertyRef Name="configId" />
     </Key>
     <Property Name="configId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="playerFK" Type="int" />
-    <Property Name="gameFK" Type="int" />
-    <Property Name="shipFK" Type="int" />
-    <Property Name="coordinate" Type="nvarchar" MaxLength="50" />
+    <Property Name="playerFK" Type="int" Nullable="false" />
+    <Property Name="gameFK" Type="int" Nullable="false" />
+    <Property Name="shipFK" Type="int" Nullable="false" />
+    <Property Name="coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Player">
     <Key>
@@ -36,18 +36,18 @@
     </Key>
     <Property Name="playerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="password" Type="nvarchar" MaxLength="50" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Ship">
     <Key>
       <PropertyRef Name="shipId" />
     </Key>
     <Property Name="shipId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="title" Type="nvarchar" MaxLength="50" />
-    <Property Name="size" Type="int" />
+    <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="size" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="bs_at_gfk_fk">
-    <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
     <End Role="Attack" Type="Self.Attack" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Game">
@@ -59,7 +59,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_at_pfk_fk">
-    <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
     <End Role="Attack" Type="Self.Attack" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Player">
@@ -71,7 +71,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_ga_cfk_fk">
-    <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
     <End Role="Game" Type="Self.Game" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Player">
@@ -83,7 +83,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_ga_ofk_fk">
-    <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
     <End Role="Game" Type="Self.Game" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Player">
@@ -95,7 +95,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_gsc_gfk_fk">
-    <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
     <End Role="GameShipConfigurations" Type="Self.GameShipConfigurations" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Game">
@@ -107,7 +107,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_gsc_pfk_fk">
-    <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
     <End Role="GameShipConfigurations" Type="Self.GameShipConfigurations" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Player">
@@ -119,7 +119,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="bs_gsc_sfk_fk">
-    <End Role="Ship" Type="Self.Ship" Multiplicity="0..1" />
+    <End Role="Ship" Type="Self.Ship" Multiplicity="1" />
     <End Role="GameShipConfigurations" Type="Self.GameShipConfigurations" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Ship">

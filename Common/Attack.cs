@@ -16,9 +16,9 @@ namespace Common
     {
         public int attackId { get; set; }
         public string coordinate { get; set; }
-        public Nullable<bool> hit { get; set; }
-        public Nullable<int> playerFK { get; set; }
-        public Nullable<int> gameFK { get; set; }
+        public bool hit { get; set; }
+        public int playerFK { get; set; }
+        public int gameFK { get; set; }
     
         public virtual Game Game { get; set; }
         public virtual Player Player { get; set; }

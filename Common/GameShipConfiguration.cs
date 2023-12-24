@@ -15,9 +15,9 @@ namespace Common
     public partial class GameShipConfiguration
     {
         public int configId { get; set; }
-        public Nullable<int> playerFK { get; set; }
-        public Nullable<int> gameFK { get; set; }
-        public Nullable<int> shipFK { get; set; }
+        public int playerFK { get; set; }
+        public int gameFK { get; set; }
+        public int shipFK { get; set; }
         public string coordinate { get; set; }
     
         public virtual Game Game { get; set; }
