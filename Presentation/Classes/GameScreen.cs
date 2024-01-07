@@ -41,7 +41,6 @@ namespace Presentation
                 Ship ship = shipRepository.GetShipById(gameShipConfiguration.shipFK);
                 //gameShipConfig coordinates are 4 letters, representing both ends of a ship
                 List<int[]> shipBodyCoordinates = Utils.parseMultipleScreenCord(gameShipConfiguration.coordinate);
-                Console.WriteLine(Utils.ConvertListToString(shipBodyCoordinates));
                 foreach (int[] point in shipBodyCoordinates)
                 {
                     shipCells.Add(new ShipCell(point, ship.title));

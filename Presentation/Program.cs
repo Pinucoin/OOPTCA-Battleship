@@ -24,13 +24,12 @@ namespace Presentation
             {
                 Console.Clear();
                 printMenu();
-                Console.WriteLine(Utils.ConvertListToString(Utils.parseMultipleScreenCord("F3D3")));
                 choice = Console.ReadLine();
                 switch (choice)
                 {
                     case "1":
                         //Option 1: Add Player Details
-                        addPlayersCreateGame();
+                        addPlayersAndCreateGame();
                         Console.ReadKey();
                         break;
                     case "2":
@@ -69,7 +68,7 @@ namespace Presentation
             Console.WriteLine("\n 1.\tAdd Player Details\n 2.\tConfigure Ships\n 3.\tLaunch Attack\n 4.\tQuit\n");
         }
 
-        private static void addPlayersCreateGame()
+        private static void addPlayersAndCreateGame()
         {
             Game game = new Game();
             for (int i = 0; i < 2; i++)
@@ -88,7 +87,7 @@ namespace Presentation
                     IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
                     foreach (Player existingPlayer in players)
                     {
-                        if (existingPlayer.username == player.username)
+                        if (existingPlayer.username.ToUpper() == player.username.ToUpper())
                         {
                             Console.WriteLine(String.Format("Player with name [{0}] Already exists. Try again with a different username. ", existingPlayer.username));
                             validUsername = false;
@@ -154,16 +153,6 @@ namespace Presentation
 
                 IQueryable<Ship> availableShips = shipRepository.GetShips();
 
-                Console.WriteLine("======================================================================");
-                Console.WriteLine("   _____ ______ _______ _    _ _____  \r\n" +
-                    "  / ____|  ____|__   __| |  | |  __ \\ \r\n" +
-                    " | (___ | |__     | |  | |  | | |__) |\r\n" +
-                    "  \\___ \\|  __|    | |  | |  | |  ___/ \r\n" +
-                    "  ____) | |____   | |  | |__| | |     \r\n" +
-                    " |_____/|______|  |_|   \\____/|_|     ");
-                Console.WriteLine("======================================================================");
-                Console.WriteLine(String.Format("{0} VS {1}", players[0].username, players[1].username));
-
                 SetupShips(player);
             }
         }
@@ -183,7 +172,16 @@ namespace Presentation
                 {
                     do
                     {
+                        Console.Clear();
 
+                        Console.WriteLine("======================================================================");
+                        Console.WriteLine("   _____ ______ _______ _    _ _____  \r\n" +
+                            "  / ____|  ____|__   __| |  | |  __ \\ \r\n" +
+                            " | (___ | |__     | |  | |  | | |__) |\r\n" +
+                            "  \\___ \\|  __|    | |  | |  | |  ___/ \r\n" +
+                            "  ____) | |____   | |  | |__| | |     \r\n" +
+                            " |_____/|______|  |_|   \\____/|_|     ");
+                        Console.WriteLine("======================================================================");
                         Console.WriteLine("Ship setup for: " + player.username);
                         gameScreen = GameScreenUtils.showPlayerShipConfig(player);
                         gameScreen.PrintGrid();
@@ -215,6 +213,8 @@ namespace Presentation
                 GameShipConfigRepository.addGameShipConfiguration(gameShipConfiguration);
                 gameScreen = GameScreenUtils.showPlayerShipConfig(player);
                 gameScreen.PrintGrid();
+                Console.WriteLine("Press Any Key to Continue..");
+                Console.ReadKey();
 
             } while (availableShips.Count() > 0);
         }
@@ -236,7 +236,6 @@ namespace Presentation
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
-                else Console.WriteLine("Found ship.");
             }
             //downward placement
             if ((arrayCoordinate[0] + ship.size - 1) < gameScreen.rows)
@@ -247,7 +246,6 @@ namespace Presentation
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
-                else Console.WriteLine("Found ship.");
             }
             //left placement
             if ((arrayCoordinate[1] - ship.size + 1) >= 0)
@@ -258,7 +256,6 @@ namespace Presentation
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
-                else Console.WriteLine("Found ship.");
             }
             //right placement
             if ((arrayCoordinate[1] + ship.size - 1) < gameScreen.cols)
@@ -269,7 +266,6 @@ namespace Presentation
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
-                else Console.WriteLine("Found ship.");
             }
 
             if (validCoordinates.Count() > 0)
@@ -331,7 +327,6 @@ namespace Presentation
 
         private static bool isValidScreenCoordinate(string boardCoordinate)
         {
-            Console.WriteLine(boardCoordinate);
             if (Utils.parseSingleScreenCord(boardCoordinate)[0] > gameScreen.rows-1 || Utils.parseSingleScreenCord(boardCoordinate)[0] < 0 || Utils.parseSingleScreenCord(boardCoordinate)[1] > gameScreen.cols-1 || Utils.parseSingleScreenCord(boardCoordinate)[1] < 0) return false;
             return true;
         }

@@ -10,7 +10,6 @@ namespace Presentation.Classes
             int[] coordinate = new int[2];
             coordinate[0] = boardCoordinate[0] - 'A';
             coordinate[1] = (boardCoordinate[1] - '0') - 1;
-            Console.WriteLine(String.Format("boardCoordinate: {0} {1} coordinate: {2} {3}", boardCoordinate[0], boardCoordinate[1], coordinate[0], coordinate[1]));
             return coordinate;
         }
 
@@ -31,8 +30,6 @@ namespace Presentation.Classes
             startCoordinate[1] = (multiCoordinate[1] - '0') - 1;
             endCoordinate[0] = multiCoordinate[2] - 'A';
             endCoordinate[1] = (multiCoordinate[3] - '0') - 1;
-
-            Console.WriteLine(String.Format("StartCoordinate: {0} EndCoordinate{1}", Utils.ArrayToString(startCoordinate), Utils.ArrayToString(endCoordinate)));
 
             if (startCoordinate[0] == endCoordinate[0])
             {
