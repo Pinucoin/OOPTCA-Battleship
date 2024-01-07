@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GameScreen.cs" />
+    <Compile Include="Classes\GameScreenUtils.cs" />
     <Compile Include="Classes\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

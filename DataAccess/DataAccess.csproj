@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ConnectionContext.cs" />
     <Compile Include="GameRepository.cs" />
+    <Compile Include="GameShipConfigRepository.cs" />
     <Compile Include="PlayerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipRepository.cs" />

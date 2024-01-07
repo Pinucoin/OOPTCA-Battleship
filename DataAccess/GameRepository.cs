@@ -17,5 +17,13 @@ namespace DataAccess
             Context.Games.Add(game);
             Context.SaveChanges();
         }
+
+        public Game getGameById(int id)
+        {
+            var selectedGame = from game in Context.Games
+                               where game.gameId == id
+                               select game;
+            return selectedGame.FirstOrDefault();
+        }
     }
 }

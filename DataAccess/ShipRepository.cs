@@ -12,5 +12,13 @@ namespace DataAccess
                                select ship;
             return selectedShip.FirstOrDefault();
         }
+
+        public IQueryable<Ship> GetShips()
+        {
+            var ships = from ship in Context.Ships
+                        select ship;
+            return ships.AsQueryable();
+        }
+
     }
 }

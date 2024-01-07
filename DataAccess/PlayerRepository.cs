@@ -20,5 +20,14 @@ namespace DataAccess
             Context.Players.Add(player);
             Context.SaveChanges();
         }
+
+        public Player GetPlayerById(int id)
+        {
+            var selectedPlayer = from player in Context.Players
+                                 where player.playerId == id
+                                 select player;
+            return selectedPlayer.FirstOrDefault();
+
+        }
     }
 }
