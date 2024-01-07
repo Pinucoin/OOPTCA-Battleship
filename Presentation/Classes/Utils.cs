@@ -17,7 +17,6 @@ namespace Presentation.Classes
         public static string arrayToBoardCoordinate(int[] arrayCoordinate)
         {
             string boardCoordinate = String.Format("{0}{1}", (char)(arrayCoordinate[0] + 'A'), (char)(arrayCoordinate[1] + 1 + '0'));
-            //Console.WriteLine(String.Format("arrayCoordinate: {0} {1} BoardCoordinate: {2} {3}", arrayCoordinate[0], arrayCoordinate[1], boardCoordinate[0], boardCoordinate[1]));
             return boardCoordinate;
         }
 
