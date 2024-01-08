@@ -379,7 +379,10 @@ namespace Presentation
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Invalid Coordinate.\nMake sure you are using the board coordinate notation (A1, B2 etc) and that it is within the visable board constraints. ");
+                    if (ex.Message == "Invalid Coordinate")
+                    {
+                        Console.WriteLine("Invalid Coordinate.\nMake sure you are using the board coordinate notation (A1, B2 etc) and that it is within the visable board constraints. ");
+                    }
                     validInput = false;
                 }
             } while (!validInput);
@@ -389,11 +392,30 @@ namespace Presentation
 
         private static void isValidScreenCoordinate(string boardCoordinate)
         {
-            if (Utils.parseSingleScreenCord(boardCoordinate)[0] > shipScreen.rows - 1 || Utils.parseSingleScreenCord(boardCoordinate)[0] < 0 || Utils.parseSingleScreenCord(boardCoordinate)[1] > shipScreen.cols - 1 || Utils.parseSingleScreenCord(boardCoordinate)[1] < 0) throw new Exception();
+            int[] arrayCoordinate = Utils.parseSingleScreenCord(boardCoordinate);
+            if (arrayCoordinate != null)
+            {
+                if (Utils.parseSingleScreenCord(boardCoordinate)[0] > shipScreen.rows - 1 || Utils.parseSingleScreenCord(boardCoordinate)[0] < 0 || Utils.parseSingleScreenCord(boardCoordinate)[1] > shipScreen.cols - 1 || Utils.parseSingleScreenCord(boardCoordinate)[1] < 0)
+                {
+                    throw new Exception("Invalid Coordinate");
+                }
+            }
+            else {
+                throw new Exception("Invalid Coordinate");
+            }
         }
 
         private static void displayGameBoards(Player playerTurn, Player otherPlayer)
         {
+            Console.Clear();
+            Console.WriteLine("======================================================================");
+            Console.WriteLine("        _______ _______       _____ _  __\r\n" +
+                "     /\\|__   __|__   __|/\\   / ____| |/ /\r\n" +
+                "    /  \\  | |     | |  /  \\ | |    | ' / \r\n" +
+                "   / /\\ \\ | |     | | / /\\ \\| |    |  <  \r\n" +
+                "  / ____ \\| |     | |/ ____ \\ |____| . \\ \r\n" +
+                " /_/    \\_\\_|     |_/_/    \\_\\_____|_|\\_\\");
+            Console.WriteLine("======================================================================");
             shipScreen = GameScreenUtils.showPlayerShipConfig(playerTurn, otherPlayer);
             attackScreen = GameScreenUtils.showPlayerAttackConfig(playerTurn);
             Console.WriteLine(String.Format("{0}'S SHIPS", playerTurn.username));
@@ -409,6 +431,7 @@ namespace Presentation
             bool isHit = false;
             do
             {
+                bool skip = false;
                 Console.WriteLine("Insert a valid coordinate to initiate your attack:");
                 attackCoordinate = getAndValidateCoordinate();
                 validAttack = GameScreenUtils.isValidAttackPosition(attackCoordinate, attackScreen);
@@ -427,12 +450,13 @@ namespace Presentation
                                 break;
                             case "N":
                                 validAttack = false;
+                                skip = true;
                                 break;
                             default:
-                                Console.WriteLine("Invalid Input.");
+                                Console.WriteLine("Invalid Input. Make sure you are inputting Y or N.");
                                 break;
                         }
-                    } while (!valid);
+                    } while (!valid && !skip);
 
                 }
 

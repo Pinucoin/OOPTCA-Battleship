@@ -7,10 +7,15 @@ namespace Presentation.Classes
     {
         public static int[] parseSingleScreenCord(string boardCoordinate)
         {
-            int[] coordinate = new int[2];
-            coordinate[0] = boardCoordinate[0] - 'A';
-            coordinate[1] = (boardCoordinate[1] - '0') - 1;
-            return coordinate;
+            if (boardCoordinate.Length == 2)
+            {
+                int[] coordinate = new int[2];
+                coordinate[0] = boardCoordinate[0] - 'A';
+                coordinate[1] = (boardCoordinate[1] - '0') - 1;
+                return coordinate;
+            }
+
+            return null;
         }
 
         public static string arrayToBoardCoordinate(int[] arrayCoordinate)
