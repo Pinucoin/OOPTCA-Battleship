@@ -5,12 +5,6 @@ namespace DataAccess
 {
     public class GameRepository : ConnectionContext
     {
-        public IQueryable<Game> GetGames()
-        {
-            var games = from game in Context.Games
-                        select game;
-            return games.AsQueryable();
-        }
 
         public void addGame(Game game)
         {
@@ -24,6 +18,15 @@ namespace DataAccess
                                where game.gameId == id
                                select game;
             return selectedGame.FirstOrDefault();
+        }
+
+        public void concludeGameById(int gameId)
+        {
+
+            var originalGame = getGameById(gameId);
+            originalGame.complete = true;
+            Context.SaveChanges();
+
         }
     }
 }

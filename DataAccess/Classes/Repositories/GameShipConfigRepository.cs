@@ -25,5 +25,6 @@ namespace DataAccess
             Context.GameShipConfigurations.Add(gameShipConfiguration);
             Context.SaveChanges();
         }
+
     }
 }

@@ -12,12 +12,18 @@ namespace Presentation
         private static PlayerRepository playerRepository = new PlayerRepository();
         private static GameRepository gameRepository = new GameRepository();
         private static ShipRepository shipRepository = new ShipRepository();
+        private static AttackRepository attackRepository = new AttackRepository();
         private static GameShipConfigRepository GameShipConfigRepository = new GameShipConfigRepository();
-        private static GameScreen gameScreen = new GameScreen(new List<Cell>());
-        private static Game currentGame;
+        private static GameScreen shipScreen = new GameScreen(new List<Cell>());
+        private static GameScreen attackScreen = new GameScreen(new List<Cell>());
+        private static Game currentGame = null;
+        private static Player mainPlayer;
+        private static Player otherPlayer;
+        private static bool shipsSet = false;
 
         static void Main(string[] args)
         {
+
             string choice;
 
             do
@@ -25,30 +31,79 @@ namespace Presentation
                 Console.Clear();
                 printMenu();
                 choice = Console.ReadLine();
-                switch (choice)
+                try
                 {
-                    case "1":
-                        //Option 1: Add Player Details
-                        addPlayersAndCreateGame();
-                        Console.ReadKey();
-                        break;
-                    case "2":
-                        //Option 2: Configure Ships
-                        DisplayShipSetupUI();
-                        Console.ReadKey();
-                        break;
-                    case "3":
-                        //Option 3: Launch Attack
-                        Console.ReadKey();
-                        break;
-                    case "4":
-                        //Option 4: Quit
-                        Console.ReadKey();
-                        break;
-                    default:
-                        Console.WriteLine(String.Format("Invalid input [{0}]. Please try again. ", choice));
-                        Console.ReadKey();
-                        break;
+                    switch (choice)
+                    {
+                        case "1":
+                            //Option 1: Add Player Details
+                            if (currentGame == null)
+                            {
+                                addPlayersAndCreateGame();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Game already running, unable to set up additional games/players.");
+                            }
+                            Console.ReadKey();
+                            break;
+                        case "2":
+                            if (currentGame != null && !shipsSet)
+                            {
+                                //Option 2: Configure Ships
+                                DisplayShipSetupUI();
+                                shipsSet = true;
+                            }
+                            else if (currentGame != null && shipsSet)
+                            {
+                                Console.WriteLine(String.Format("Ships for current game titled [{0}] have already been set for both players. \nProceed to option 3.", currentGame.title));
+                            }
+                            else
+                            {
+                                Console.WriteLine("Set up a game/players before trying to configure ships.");
+                            }
+                            Console.ReadKey();
+                            break;
+                        case "3":
+                            //Option 3: Launch Attack
+                            if (currentGame != null && shipsSet)
+                            {
+                                displayGameBoards(mainPlayer, otherPlayer);
+                                attack(mainPlayer, otherPlayer);
+                                checkForWinner(mainPlayer);
+
+                                if (!currentGame.complete)
+                                {
+                                    Player temp = mainPlayer;
+                                    mainPlayer = otherPlayer;
+                                    otherPlayer = temp;
+                                }
+                            }
+                            else if (currentGame == null)
+                            {
+                                Console.WriteLine("Please set up players/game before trying to attack.");
+                            }
+                            else if (currentGame != null && !shipsSet)
+                            {
+                                Console.WriteLine("Please set up both players' ships before trying to attack.");
+                            }
+                            Console.ReadKey();
+                            break;
+                        case "4":
+                            //Option 4: Quit
+                            Console.WriteLine("Quitting...");
+                            Console.ReadKey();
+                            break;
+                        default:
+                            Console.WriteLine(String.Format("Invalid input [{0}]. Please try again. ", choice));
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An Error has occured.");
+                    Console.ReadKey();
                 }
 
             } while (choice != "4");
@@ -76,14 +131,12 @@ namespace Presentation
                 bool validUsername = true;
                 Player player = new Player();
 
-                //Getting user input for username
                 do
                 {
                     validUsername = true;
                     Console.WriteLine("Input player username: ");
                     player.username = Console.ReadLine();
 
-                    //Checking for existing players with the same username
                     IQueryable<Player> players = playerRepository.GetPlayers().AsQueryable();
                     foreach (Player existingPlayer in players)
                     {
@@ -95,7 +148,6 @@ namespace Presentation
                     }
                 } while (!validUsername);
 
-                //Getting user input for password
                 Console.WriteLine("Input player password: ");
                 player.password = getPassword();
 
@@ -105,10 +157,12 @@ namespace Presentation
                 if (i == 0)
                 {
                     game.creatorFK = player.playerId;
+                    mainPlayer = player;
                 }
                 else
                 {
                     game.opponentFK = player.playerId;
+                    otherPlayer = player;
                 }
             }
 
@@ -183,8 +237,8 @@ namespace Presentation
                             " |_____/|______|  |_|   \\____/|_|     ");
                         Console.WriteLine("======================================================================");
                         Console.WriteLine("Ship setup for: " + player.username);
-                        gameScreen = GameScreenUtils.showPlayerShipConfig(player);
-                        gameScreen.PrintGrid();
+                        shipScreen = GameScreenUtils.showPlayerShipConfig(player);
+                        shipScreen.PrintGrid();
                         Console.WriteLine("Select ship to set up by id.");
                         printShipSelection(availableShips);
                         selection = Convert.ToInt32(Console.ReadLine());
@@ -211,8 +265,8 @@ namespace Presentation
                 gameShipConfiguration.coordinate = fullCoordinate;
 
                 GameShipConfigRepository.addGameShipConfiguration(gameShipConfiguration);
-                gameScreen = GameScreenUtils.showPlayerShipConfig(player);
-                gameScreen.PrintGrid();
+                shipScreen = GameScreenUtils.showPlayerShipConfig(player);
+                shipScreen.PrintGrid();
                 Console.WriteLine("Press Any Key to Continue..");
                 Console.ReadKey();
 
@@ -232,17 +286,17 @@ namespace Presentation
             {
                 secondCoordinate = new int[] { arrayCoordinate[0] - (ship.size - 1), arrayCoordinate[1] };
                 string finalCoordinate = (startBoardCoordinate + Utils.arrayToBoardCoordinate(secondCoordinate));
-                if (!GameScreenUtils.isColliding(finalCoordinate, player, gameScreen))
+                if (!GameScreenUtils.isColliding(finalCoordinate, shipScreen))
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
             }
             //downward placement
-            if ((arrayCoordinate[0] + ship.size - 1) < gameScreen.rows)
+            if ((arrayCoordinate[0] + ship.size - 1) < shipScreen.rows)
             {
                 secondCoordinate = new int[] { arrayCoordinate[0] + (ship.size - 1), arrayCoordinate[1] };
                 string finalCoordinate = (startBoardCoordinate + Utils.arrayToBoardCoordinate(secondCoordinate));
-                if (!GameScreenUtils.isColliding(finalCoordinate, player, gameScreen))
+                if (!GameScreenUtils.isColliding(finalCoordinate, shipScreen))
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
@@ -252,17 +306,17 @@ namespace Presentation
             {
                 secondCoordinate = new int[] { arrayCoordinate[0], arrayCoordinate[1] - (ship.size - 1) };
                 string finalCoordinate = (startBoardCoordinate + Utils.arrayToBoardCoordinate(secondCoordinate));
-                if (!GameScreenUtils.isColliding(finalCoordinate, player, gameScreen))
+                if (!GameScreenUtils.isColliding(finalCoordinate, shipScreen))
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
             }
             //right placement
-            if ((arrayCoordinate[1] + ship.size - 1) < gameScreen.cols)
+            if ((arrayCoordinate[1] + ship.size - 1) < shipScreen.cols)
             {
                 secondCoordinate = new int[] { arrayCoordinate[0], arrayCoordinate[1] + (ship.size - 1) };
                 string finalCoordinate = (startBoardCoordinate + Utils.arrayToBoardCoordinate(secondCoordinate));
-                if (!GameScreenUtils.isColliding(finalCoordinate, player, gameScreen))
+                if (!GameScreenUtils.isColliding(finalCoordinate, shipScreen))
                 {
                     validCoordinates.Add(finalCoordinate);
                 }
@@ -297,6 +351,7 @@ namespace Presentation
             else
             {
                 Console.WriteLine(String.Format("No valid placement for {0} with size {1}. try again at a new coordinate.", ship.title, ship.size));
+                Console.ReadKey();
                 return "";
             }
         }
@@ -313,24 +368,104 @@ namespace Presentation
         private static string getAndValidateCoordinate()
         {
             string boardCoordinate;
+            bool validInput;
             do
             {
+                validInput = true;
                 boardCoordinate = Console.ReadLine();
-                if (!isValidScreenCoordinate(boardCoordinate))
+                try
+                {
+                    isValidScreenCoordinate(boardCoordinate);
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine("Invalid Coordinate.\nMake sure you are using the board coordinate notation (A1, B2 etc) and that it is within the visable board constraints. ");
+                    validInput = false;
                 }
-            } while (!isValidScreenCoordinate(boardCoordinate));
+            } while (!validInput);
 
             return boardCoordinate;
         }
 
-        private static bool isValidScreenCoordinate(string boardCoordinate)
+        private static void isValidScreenCoordinate(string boardCoordinate)
         {
-            if (Utils.parseSingleScreenCord(boardCoordinate)[0] > gameScreen.rows-1 || Utils.parseSingleScreenCord(boardCoordinate)[0] < 0 || Utils.parseSingleScreenCord(boardCoordinate)[1] > gameScreen.cols-1 || Utils.parseSingleScreenCord(boardCoordinate)[1] < 0) return false;
-            return true;
+            if (Utils.parseSingleScreenCord(boardCoordinate)[0] > shipScreen.rows - 1 || Utils.parseSingleScreenCord(boardCoordinate)[0] < 0 || Utils.parseSingleScreenCord(boardCoordinate)[1] > shipScreen.cols - 1 || Utils.parseSingleScreenCord(boardCoordinate)[1] < 0) throw new Exception();
         }
 
+        private static void displayGameBoards(Player playerTurn, Player otherPlayer)
+        {
+            shipScreen = GameScreenUtils.showPlayerShipConfig(playerTurn, otherPlayer);
+            attackScreen = GameScreenUtils.showPlayerAttackConfig(playerTurn);
+            Console.WriteLine(String.Format("{0}'S SHIPS", playerTurn.username));
+            shipScreen.PrintGrid();
+            Console.WriteLine(String.Format("{0}'S ATTACKS", playerTurn.username));
+            attackScreen.PrintGrid();
+        }
 
+        private static void attack(Player attacker, Player receiver)
+        {
+            bool validAttack = false;
+            string attackCoordinate;
+            bool isHit = false;
+            do
+            {
+                Console.WriteLine("Insert a valid coordinate to initiate your attack:");
+                attackCoordinate = getAndValidateCoordinate();
+                validAttack = GameScreenUtils.isValidAttackPosition(attackCoordinate, attackScreen);
+                if (!validAttack)
+                {
+                    Console.WriteLine("Are you sure? You've already attack this cell. Proceeding will result in a failure. Y/N");
+                    bool valid = false;
+                    do
+                    {
+                        string input = Console.ReadLine().ToUpper();
+                        switch (input)
+                        {
+                            case "Y":
+                                Console.WriteLine("Invalid Attack Position. Past attack already present.\nTry again at a new position. ");
+                                valid = true;
+                                break;
+                            case "N":
+                                validAttack = false;
+                                break;
+                            default:
+                                Console.WriteLine("Invalid Input.");
+                                break;
+                        }
+                    } while (!valid);
+
+                }
+
+            } while (!validAttack);
+
+            Console.WriteLine(String.Format("Sending Attack on Cell [{0}]", attackCoordinate));
+            GameScreen enemySetup = GameScreenUtils.showPlayerShipConfig(receiver);
+            isHit = GameScreenUtils.isHit(attackCoordinate, enemySetup);
+            Attack attack = new Attack();
+            attack.coordinate = attackCoordinate;
+            attack.hit = isHit;
+            attack.playerFK = attacker.playerId;
+            attack.gameFK = currentGame.gameId;
+            attackRepository.addAttack(attack);
+
+            if (isHit)
+            {
+                Console.Write("Hit");
+            }
+            else {
+                Console.Write("Miss");
+            }
+            Console.Write(String.Format(" on Cell [{0}]!\n", attackCoordinate));
+        }
+
+        private static void checkForWinner(Player player)
+        {
+            if (attackRepository.GetAttackHitsByPlayerId(player.playerId).Count() == 17)
+            {
+                gameRepository.concludeGameById(currentGame.gameId);
+                currentGame.complete = true;
+                Console.WriteLine(String.Format("Player {0} Wins!", player.username));
+            }
+        }
     }
 }

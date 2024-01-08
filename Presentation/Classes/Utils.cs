@@ -89,15 +89,5 @@ namespace Presentation.Classes
             }
             return false;
         }
-
-        public static string ConvertListToString(List<int[]> list)
-        {
-            return "[" + string.Join(", ", list.ConvertAll(arr => ArrayToString(arr))) + "]";
-        }
-
-        public static string ArrayToString(int[] arr)
-        {
-            return "[" + string.Join(", ", arr) + "]";
-        }
     }
 }

@@ -8,7 +8,7 @@ namespace Presentation
 {
     public class GameScreen
     {
-        List<Cell> cells;
+        List<Cell> cells = new List<Cell>();
         public int rows { get; }
         public int cols { get; }
         public ShipRepository shipRepository = new ShipRepository();
@@ -50,9 +50,35 @@ namespace Presentation
             cells = shipCells;
         }
 
+        public GameScreen(List<GameShipConfiguration> gameShipConfigurations, List<Attack> attacks)
+        {
+            rows = 7;
+            cols = 8;
+            foreach (Attack attack in attacks)
+            {
+                Console.WriteLine();
+                cells.Add(new AttackCell(attack.hit, Utils.parseSingleScreenCord(attack.coordinate)));
+
+            }
+
+            foreach (GameShipConfiguration gameShipConfiguration in gameShipConfigurations)
+            {
+                Ship ship = shipRepository.GetShipById(gameShipConfiguration.shipFK);
+                //gameShipConfig coordinates are 4 letters, representing both ends of a ship
+                List<int[]> shipBodyCoordinates = Utils.parseMultipleScreenCord(gameShipConfiguration.coordinate);
+                foreach (int[] point in shipBodyCoordinates)
+                {
+                    if (!isAttackCellPresent(point))
+                    {
+                        cells.Add(new ShipCell(point, ship.title));
+                    }
+                }
+            }
+        }
+
         public void PrintGrid()
         {
-            Console.WriteLine(cells.Count);
+            Console.WriteLine("======================================================================");
             // Print the grid
             Console.WriteLine("  \t1\t2\t3\t4\t5\t6\t7\t8");
             for (int row = 0; row < rows; row++)
@@ -61,7 +87,7 @@ namespace Presentation
                 Console.Write((char)('A' + row) + "\t");
                 for (int col = 0; col < cols; col++)
                 {
-                    if (!specialCellPresent(new int[] { row, col }))
+                    if (!isSpecialCellPresent(new int[] { row, col }))
                     {
                         Console.Write(String.Format("≈", row, col));
                     }
@@ -69,9 +95,10 @@ namespace Presentation
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine("======================================================================");
         }
 
-        public bool specialCellPresent(int[] position)
+        public bool isSpecialCellPresent(int[] position)
         {
             bool present = false;
             foreach (Cell cell in cells)
@@ -86,7 +113,7 @@ namespace Presentation
             return present;
         }
 
-        public bool shipCellPresent(int[] position)
+        public bool isShipCellPresent(int[] position)
         {
             bool present = false;
             foreach (Cell cell in cells)
@@ -96,6 +123,21 @@ namespace Presentation
                     present = true;
                 }
             }
+            return present;
+        }
+
+        public bool isAttackCellPresent(int[] position)
+        {
+            bool present = false;
+
+            foreach (Cell cell in cells)
+            {
+                if (cell is AttackCell && Utils.equateArrays(cell.coordinate, position))
+                {
+                    present = true;
+                }
+            }
+
             return present;
         }
     }
@@ -113,7 +155,7 @@ namespace Presentation
         public ShipCell(int[] coordinate, string title)
         {
             this.coordinate = coordinate;
-            this.title = title.Substring(0,2).ToUpper();
+            this.title = title.Substring(0, 2).ToUpper();
         }
 
         public override void PrintCell()
@@ -143,6 +185,4 @@ namespace Presentation
             else Console.Write("O");
         }
     }
-
-
 }
