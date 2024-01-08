@@ -1,0 +1,59 @@
+CREATE DATABASE BattleshipDB;
+GO 
+
+USE BattleshipDB;
+
+CREATE SCHEMA [GameSchema];
+GO
+
+CREATE TABLE [GameSchema].Player (
+	playerId int IDENTITY(1,1) PRIMARY KEY,
+	username NVARCHAR(50) NOT NULL
+		CONSTRAINT bs__pl_un_un UNIQUE,
+	[password] NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE [GameSchema].Game (
+	gameId int IDENTITY(1,1) PRIMARY KEY,
+	title NVARCHAR(50), 
+	creatorFK int NOT NULL
+		CONSTRAINT bs_ga_cfk_fk REFERENCES [GameSchema].Player (playerId),
+	opponentFK int NOT NULL
+		CONSTRAINT bs_ga_ofk_fk REFERENCES [GameSchema].Player (playerId),
+	complete BIT NOT NULL
+);
+
+CREATE TABLE [GameSchema].Attack (
+	attackId int IDENTITY(1,1) PRIMARY KEY,
+	coordinate NVARCHAR(50) NOT NULL, 
+	hit BIT NOT NULL,
+	playerFK int NOT NULL
+		CONSTRAINT bs_at_pfk_fk REFERENCES [GameSchema].Player (playerId),
+	gameFK int NOT NULL
+		CONSTRAINT bs_at_gfk_fk REFERENCES [GameSchema].Game (gameId)
+);
+
+CREATE TABLE [GameSchema].Ship (
+	shipId int IDENTITY(1,1) PRIMARY KEY,
+	title NVARCHAR(50) NOT NULL,
+	size int NOT NULL
+);
+
+CREATE TABLE [GameSchema].GameShipConfigurations (
+	configId int IDENTITY(1,1) PRIMARY KEY,
+	playerFK int NOT NULL
+		CONSTRAINT bs_gsc_pfk_fk REFERENCES [GameSchema].Player (playerId),
+	gameFK int NOT NULL
+		CONSTRAINT bs_gsc_gfk_fk REFERENCES [GameSchema].Game (gameId),
+	shipFK int NOT NULL
+		CONSTRAINT bs_gsc_sfk_fk REFERENCES [GameSchema].Ship (shipId),
+	coordinate NVARCHAR(50) NOT NULL
+);
+GO
+
+INSERT INTO GameSchema.Ship (title, size)
+VALUES('Carrier', 5),
+	('Battleship', 4),
+	('Cruiser', 3),
+	('Submarine', 3),
+	('Destroyer', 2);
