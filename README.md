@@ -21,3 +21,10 @@
       |____/_/    \_\_|     |_|  |______|______|_____/|_|  |_|_____|_|  
 ```
  Created by Damian Navarro 6.1B for the OOP TCA.
+
+Installing:
+- Make sure you are running a valid SQL server with SQL Server Management Studio installed.
+- Execute the Setup Script attached in the repo.
+- Execute the game. 
+
+IMPORTANT: Make sure you empty all the tables between execution of the program to avoid any errors. 
